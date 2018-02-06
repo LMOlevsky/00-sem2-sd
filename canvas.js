@@ -1,16 +1,20 @@
 var c = document.getElementById("slate");
 var ctx = c.getContext('2d');
 var shape;
+var cleared;
 
 shape = "rectangle";
 
 ctx.fillStyle = "red";
 
 var clearScreen = function(){
+    ctx.beginPath();
     ctx.clearRect(0,0,c.width,c.height)
+    clear = true;
 }
 
 var toggleShape = function(){
+    ctx.beginPath();
     if (shape == "circle"){
 	shape = "rectangle"
     }
@@ -20,18 +24,24 @@ var toggleShape = function(){
 }
 
 var makeShape = function(e){
-    var rect = c.getBoundingClientRect()
     if (shape == "rectangle"){
-	ctx.fillRect(e.clientX - rect.left, e.clientY - rect.top, 50, 50)
+	ctx.fillRect(e.offsetX, e.offsetY, 20, 20)
+	ctx.lineTo(e.offsetX, e.offsetY);
     }
     else if (shape == "circle"){
-	ctx.beginPath();
-	ctx.arc(e.clientX - rect.left, e.clientY - rect.top, 25, 0, 2*Math.PI);
+	ctx.arc(e.offsetX, e.offsetY, 15, 0, 2*Math.PI);
 	ctx.fill();
+	ctx.closePath();
+	ctx.moveTo(e.offsetX, e.offsetY);
+	ctx.lineTo(e.offsetX, e.offsetY);
     }
+    ctx.stroke();
+}
+
+var makeLine = function(e){
+    beginPath()
 }
 
 clear.addEventListener('click', clearScreen);
 toggle.addEventListener('click', toggleShape);
 c.addEventListener('click', makeShape);
-
